@@ -128,7 +128,7 @@
                 const workbook = XLSX.read(data, { type: 'array' });
                 totalsheet = workbook;
                 // Access the first sheet
-                dataSheet1 = convertDataFromexcel(1, workbook); // Replace 'sheet1' with the actual sheet name
+                dataSheet1 = convertDataFromexcel(1, workbook);
                 dataSheet2 = convertDataFromexcel(2, workbook);
                 dataSheet3 = convertDataFromexcel(3, workbook);
                 dataSheet4 = convertDataFromexcel(4, workbook);
@@ -288,11 +288,7 @@
             const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
             return jsonData
         }
-        // Extract data from each sheet
 
-        // Create visuals using a visualization library (e.g., Chart.js)
-        // Replace the following code with your specific visualization code
-        // Make sure to map the correct data to each visual
 
     </script>
 </body>
