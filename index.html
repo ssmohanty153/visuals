@@ -251,7 +251,7 @@
                 const columns = dataSheet4[0];
                 columns?.forEach(columnName => {
                     const th = document?.createElement('th');
-                    th?.textContent = columnName;
+                    th.textContent = columnName;
                     headerRow?.appendChild(th);
                 });
                 tableHeader?.appendChild(headerRow);
@@ -264,8 +264,8 @@
                     const tr = document?.createElement('tr');
                     row?.forEach(cellData => {
                         const td = document?.createElement('td');
-                        td?.textContent = cellData;
-                        tr?.appendChild(td);
+                        td.textContent = cellData;
+                        tr.appendChild(td);
                     });
                     tableBody?.appendChild(tr);
                 });
