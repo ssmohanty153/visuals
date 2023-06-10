@@ -122,42 +122,42 @@
 
         }
         fetch(fileURL)
-            .then(response => response.arrayBuffer())
+            .then(response => response?.arrayBuffer())
             .then(buffer => {
                 const data = new Uint8Array(buffer);
-                const workbook = XLSX.read(data, { type: 'array' });
+                const workbook = XLSX?.read(data, { type: 'array' });
                 totalsheet = workbook;
                 // Access the first sheet
                 dataSheet1 = convertDataFromexcel(1, workbook);
                 dataSheet2 = convertDataFromexcel(2, workbook);
                 dataSheet3 = convertDataFromexcel(3, workbook);
                 dataSheet4 = convertDataFromexcel(4, workbook);
-                let datasheet1xaxix = dataSheet1.map((data, index) => {
+                let datasheet1xaxix = dataSheet1?.map((data, index) => {
                     return data[0];
                 })
-                let datasheet1Yaxix = dataSheet1.map((data, index) => {
+                let datasheet1Yaxix = dataSheet1?.map((data, index) => {
                     return data[1];
                 })
 
-                let datasheetxaxix = dataSheet2.map((data, index) => {
+                let datasheetxaxix = dataSheet2?.map((data, index) => {
                     return data[0];
                 })
-                let datasheetYaxix = dataSheet2.map((data, index) => {
+                let datasheetYaxix = dataSheet2?.map((data, index) => {
                     return data[1];
                 })
 
-                let datasheet3xaxix = dataSheet3.map((data, index) => {
+                let datasheet3xaxix = dataSheet3?.map((data, index) => {
                     return data[1];
                 })
-                let datasheet3Yaxix = dataSheet3.map((data, index) => {
+                let datasheet3Yaxix = dataSheet3?.map((data, index) => {
                     return data[2];
                 })
-                const sheetName = workbook.SheetNames[0];
+                const sheetName = workbook?.SheetNames[0];
 
-                const worksheet = workbook.Sheets[sheetName];
+                const worksheet = workbook?.Sheets[sheetName];
 
                 // Convert worksheet data to JSON format
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                const jsonData = XLSX?.utils?.sheet_to_json(worksheet, { header: 1 });
                 const data2 = {
                     labels: datasheetxaxix,
                     datasets: [{
@@ -236,38 +236,38 @@
                 };
                 console.log(jsonData); // Output the parsed data to the console
 
-                const visual1 = new Chart(document.getElementById('myChart1'), config1);
-                const visual2 = new Chart(document.getElementById('myChart2'), config2);
+                const visual1 = new Chart(document?.getElementById('myChart1'), config1);
+                const visual2 = new Chart(document?.getElementById('myChart2'), config2);
 
-                const visual3 = new Chart(document.getElementById('myChart3'), config3);
+                const visual3 = new Chart(document?.getElementById('myChart3'), config3);
 
 
 
                 // Get the table header element
-                const tableHeader = document.getElementById('tableHeader');
+                const tableHeader = document?.getElementById('tableHeader');
 
                 // Generate table header based on column names
-                const headerRow = document.createElement('tr');
+                const headerRow = document?.createElement('tr');
                 const columns = dataSheet4[0];
-                columns.forEach(columnName => {
-                    const th = document.createElement('th');
-                    th.textContent = columnName;
-                    headerRow.appendChild(th);
+                columns?.forEach(columnName => {
+                    const th = document?.createElement('th');
+                    th?.textContent = columnName;
+                    headerRow?.appendChild(th);
                 });
-                tableHeader.appendChild(headerRow);
+                tableHeader?.appendChild(headerRow);
 
                 // Get the table body element
-                const tableBody = document.getElementById('tableBody');
+                const tableBody = document?.getElementById('tableBody');
 
                 // Generate table rows from the Excel data
-                dataSheet4.slice(1).forEach(row => {
-                    const tr = document.createElement('tr');
-                    row.forEach(cellData => {
-                        const td = document.createElement('td');
-                        td.textContent = cellData;
-                        tr.appendChild(td);
+                dataSheet4?.slice(1)?.forEach(row => {
+                    const tr = document?.createElement('tr');
+                    row?.forEach(cellData => {
+                        const td = document?.createElement('td');
+                        td?.textContent = cellData;
+                        tr?.appendChild(td);
                     });
-                    tableBody.appendChild(tr);
+                    tableBody?.appendChild(tr);
                 });
 
 
@@ -285,7 +285,7 @@
             const worksheet = totalsheet?.Sheets[sheetName];
 
             // Convert worksheet data to JSON format
-            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            const jsonData = XLSX?.utils?.sheet_to_json(worksheet, { header: 1 });
             return jsonData
         }
 
