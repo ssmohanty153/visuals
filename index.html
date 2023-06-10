@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        /* CSS styles for visuals */
+        .visual {
+            width: 1300px;
+            height: 600px;
+            background-color: #f2f2f2;
+            margin: 20px;
+            display: inline-block;
+            text-align: center;
+            padding: 20px;
+        }
+
+        canvas {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #f9f9f9;
+        }
+
+        th {
+            background-color: #4e7fc1;
+            color: #fff;
+            font-weight: bold;
+            text-align: left;
+            padding: 12px;
+        }
+
+        td {
+            background-color: #fff;
+            padding: 12px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #eaf2ff;
+        }
+
+        .menu {
+            display: flex;
+        }
+
+        li {
+            list-style-type: none;
+            border: #4e7fc1;
+            height: auto;
+            width: auto;
+        }
+
+        button {
+            background-color: #4e7fc1;
+            margin: 5px;
+        }
+
+        .visual_contaioner {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"> </script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+    <ul class="menu">
+        <li><a href="#visual1"><button>Visual 1</button></a></li>
+        <li><a href="#visual2"><button>Visual 2</button></a></li>
+        <li><a href="#visual3"><button>Visual 3</button></a></li>
+        <li><a href="#visual4"><button>Visual 4</button></a></li>
+    </ul>
+    <div class="visual_contaioner">
+        <div class="visual" id="visual1">
+            <h2>Visual 1</h2>
+            <canvas id="myChart1" style="width:100%;max-width:700px"></canvas>
+            <!-- Add HTML content for visual 1 -->
+        </div>
+
+        <div class="visual" id="visual2">
+            <h2>Visual 2</h2>
+            <canvas id="myChart2" style="width:100%;max-width:700px"></canvas>
+            <!-- Add HTML content for visual 2 -->
+        </div>
+
+        <div class="visual" id="visual3">
+            <h2>Visual 3</h2>
+            <canvas id="myChart3" style="width:100%;max-width:700px"></canvas>
+            <!-- Add HTML content for visual 3 -->
+        </div>
+
+        <div class="visual" id="visual4">
+            <h2>Visual 4</h2>
+            <table id="myTable">
+                <thead id="tableHeader">
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+            <!-- Add HTML content for visual 4 -->
+        </div>
+    </div>
+
+    <script>
+        const fileURL = 'firstsheet.xlsx';
+        let totalsheet = 0;
+        let dataSheet1;
+        let dataSheet2;
+        let dataSheet3;
+        let dataSheet4;
+
+        const func = async () => {
+
+        }
+        fetch(fileURL)
+            .then(response => response.arrayBuffer())
+            .then(buffer => {
+                const data = new Uint8Array(buffer);
+                const workbook = XLSX.read(data, { type: 'array' });
+                totalsheet = workbook;
+                // Access the first sheet
+                dataSheet1 = convertDataFromexcel(1, workbook); // Replace 'sheet1' with the actual sheet name
+                dataSheet2 = convertDataFromexcel(2, workbook);
+                dataSheet3 = convertDataFromexcel(3, workbook);
+                dataSheet4 = convertDataFromexcel(4, workbook);
+                let datasheet1xaxix = dataSheet1.map((data, index) => {
+                    return data[0];
+                })
+                let datasheet1Yaxix = dataSheet1.map((data, index) => {
+                    return data[1];
+                })
+
+                let datasheetxaxix = dataSheet2.map((data, index) => {
+                    return data[0];
+                })
+                let datasheetYaxix = dataSheet2.map((data, index) => {
+                    return data[1];
+                })
+
+                let datasheet3xaxix = dataSheet3.map((data, index) => {
+                    return data[1];
+                })
+                let datasheet3Yaxix = dataSheet3.map((data, index) => {
+                    return data[2];
+                })
+                const sheetName = workbook.SheetNames[0];
+
+                const worksheet = workbook.Sheets[sheetName];
+
+                // Convert worksheet data to JSON format
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                const data2 = {
+                    labels: datasheetxaxix,
+                    datasets: [{
+                        label: 'Sum of Sales (€million)',
+                        data: datasheetYaxix,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                };
+
+                // Chart configuration
+                const data1 = {
+                    labels: datasheet1xaxix,
+                    datasets: [{
+                        label: 'Sum of Profits (€million)',
+                        data: datasheet1Yaxix,
+
+                        borderWidth: 1
+                    }]
+                };
+                const config1 = {
+                    type: 'bar',
+                    data: data1,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    },
+                };
+
+
+                const config2 = {
+                    type: 'line',
+                    data: data2,
+                    options: {
+                        animations: {
+                            tension: {
+                                duration: 1000,
+                                easing: 'linear',
+                                from: 1,
+                                to: 0,
+                                loop: true
+                            }
+                        },
+                        scales: {
+                            y: { // defining min and max so hiding the dataset does not change scale range
+                                min: 5000000,
+                                max: 25000000
+                            }
+                        }
+                    }
+                };
+
+                const data3 = {
+                    labels: datasheet3xaxix,
+                    datasets: [{
+                        label: 'Sum of Profits (€million)',
+                        data: datasheet3Yaxix,
+
+                        borderWidth: 1
+                    }]
+                };
+                const config3 = {
+                    type: 'bar',
+                    data: data3,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    },
+                };
+                console.log(jsonData); // Output the parsed data to the console
+
+                const visual1 = new Chart(document.getElementById('myChart1'), config1);
+                const visual2 = new Chart(document.getElementById('myChart2'), config2);
+
+                const visual3 = new Chart(document.getElementById('myChart3'), config3);
+
+
+
+                // Get the table header element
+                const tableHeader = document.getElementById('tableHeader');
+
+                // Generate table header based on column names
+                const headerRow = document.createElement('tr');
+                const columns = dataSheet4[0];
+                columns.forEach(columnName => {
+                    const th = document.createElement('th');
+                    th.textContent = columnName;
+                    headerRow.appendChild(th);
+                });
+                tableHeader.appendChild(headerRow);
+
+                // Get the table body element
+                const tableBody = document.getElementById('tableBody');
+
+                // Generate table rows from the Excel data
+                dataSheet4.slice(1).forEach(row => {
+                    const tr = document.createElement('tr');
+                    row.forEach(cellData => {
+                        const td = document.createElement('td');
+                        td.textContent = cellData;
+                        tr.appendChild(td);
+                    });
+                    tableBody.appendChild(tr);
+                });
+
+
+
+                console.log(dataSheet2, "asldakslmkksm");
+
+            })
+            .catch(error => {
+                console.error('Error reading the file:', error);
+            });
+        const jsonData = { /* Your JSON data here */ };
+        function convertDataFromexcel(sheetNo, totalsheet) {
+            const sheetName = totalsheet?.SheetNames[sheetNo - 1];
+
+            const worksheet = totalsheet?.Sheets[sheetName];
+
+            // Convert worksheet data to JSON format
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            return jsonData
+        }
+        // Extract data from each sheet
+
+        // Create visuals using a visualization library (e.g., Chart.js)
+        // Replace the following code with your specific visualization code
+        // Make sure to map the correct data to each visual
+
+    </script>
+</body>
+
+</html>
